@@ -1,2 +1,5 @@
 # KK_Algorithm_Study
-small study of Seorabol
+
+study of Seorabol
+
+At least one problem a day
