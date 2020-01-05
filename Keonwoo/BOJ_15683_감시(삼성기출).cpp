@@ -5,31 +5,31 @@
 
 using namespace std;
 
-// »ç¹«½ÇÀÇ ¼¼·Î¿Í °¡·Î Å©±â°¡ n, m
+// ì‚¬ë¬´ì‹¤ì˜ ì„¸ë¡œì™€ ê°€ë¡œ í¬ê¸°ê°€ n, m
 int n, m;
-// 8*8ÀÌ ÃÖ´ëÀÌ¹Ç·Î »ç°¢Áö´ëÀÇ ÃÖ¼Ú°ªÀ» ¿ì¼± 100À¸·Î ¼³Á¤
+// 8*8ì´ ìµœëŒ€ì´ë¯€ë¡œ ì‚¬ê°ì§€ëŒ€ì˜ ìµœì†Ÿê°’ì„ ìš°ì„  100ìœ¼ë¡œ ì„¤ì •
 int minBlindSpot = 100;
 
-// map°ú tempMapÀ» »ç¿ëÇÏ¿© dfs·ÎºÎÅÍ ¸®ÅÏµÉ ¶§ mapÀ» º¹»ç
+// mapê³¼ tempMapì„ ì‚¬ìš©í•˜ì—¬ dfsë¡œë¶€í„° ë¦¬í„´ë  ë•Œ mapì„ ë³µì‚¬
 int map[8][8];
 
-// ¹æÇâ ¹è¿­
-//	 3
+// ë°©í–¥ ë°°ì—´
+//   3
 // 2 + 0
 //   1
 int dy[] = { 0, 1, 0, -1 };
 int dx[] = { 1, 0, -1, 0 };
 
-// cctv ÁÂÇ¥¸¦ ´ãÀ» º¤ÅÍ
+// cctv ì¢Œí‘œë¥¼ ë‹´ì„ ë²¡í„°
 vector<pair<int, int>> cctv;
 
-// brute forcingÀ¸·Î ¸ğµç cctv¸¦ °Ë»ö
+// brute forcingìœ¼ë¡œ ëª¨ë“  cctvë¥¼ ê²€ìƒ‰
 /*
-	idx´Â ÇöÀç Å½»öÇÏ°í ÀÖ´Â cctv¹øÈ£
-	blindSpotÀº ÇöÀç ¸Ê »óÅÂ¿¡¼­ÀÇ »ç°¢Áö´ë °³¼ö
+	idxëŠ” í˜„ì¬ íƒìƒ‰í•˜ê³  ìˆëŠ” cctvë²ˆí˜¸
+	blindSpotì€ í˜„ì¬ ë§µ ìƒíƒœì—ì„œì˜ ì‚¬ê°ì§€ëŒ€ ê°œìˆ˜
 */
 void simulate(int idx, int blindSpot) {
-	// cctv ÀÎµ¦½º°¡ ³¡±îÁö µµ´ŞÇßÀ¸¸é Æ®¸®ÀÇ leaf node¿¡ µµ´ŞÇÑ °Í
+	// cctv ì¸ë±ìŠ¤ê°€ ëê¹Œì§€ ë„ë‹¬í–ˆìœ¼ë©´ íŠ¸ë¦¬ì˜ leaf nodeì— ë„ë‹¬í•œ ê²ƒ
 	if (idx == cctv.size()) {
 		if (minBlindSpot > blindSpot) {
 			minBlindSpot = blindSpot;
@@ -37,61 +37,61 @@ void simulate(int idx, int blindSpot) {
 		return;
 	}
 
-	// cctvÀÇ ¿ø·¡ ÁÂÇ¥¸¦ ÀúÀå
+	// cctvì˜ ì›ë˜ ì¢Œí‘œë¥¼ ì €ì¥
 	int original_y = cctv[idx].first;
 	int original_x = cctv[idx].second;
 
-	// cctvÀÇ Á¾·ù
+	// cctvì˜ ì¢…ë¥˜
 	int cctvNo = map[original_y][original_x];
 
-	/// y, x´Â cctv°¡ °¨½ÃÇÏ´Â »ç¹«½Ç ÀÎµ¦½º
+	/// y, xëŠ” cctvê°€ ê°ì‹œí•˜ëŠ” ì‚¬ë¬´ì‹¤ ì¸ë±ìŠ¤
 	int y, x;
 
 	int tempMap[8][8];
-	// dfs·ÎºÎÅÍ ¸®ÅÏ½Ã ¸Ê º¹±¸¸¦ À§ÇØ ÀúÀå.
+	// dfsë¡œë¶€í„° ë¦¬í„´ì‹œ ë§µ ë³µêµ¬ë¥¼ ìœ„í•´ ì €ì¥.
 	memcpy(tempMap, map, sizeof(map));
 
-	// 1¹øÀÏ ¶§´Â ÇÑ ¹æÇâ¸¸ Å½»ö °¡´ÉÇÏ¹Ç·Î ³× ¹æÇâ ¸ğµÎ Å½»ö
+	// 1ë²ˆì¼ ë•ŒëŠ” í•œ ë°©í–¥ë§Œ íƒìƒ‰ ê°€ëŠ¥í•˜ë¯€ë¡œ ë„¤ ë°©í–¥ ëª¨ë‘ íƒìƒ‰
 	if (cctvNo == 1) {
 		for (int dir = 0; dir < 4; dir++) {
 			int watchedArea = 0;
 			y = original_y;
 			x = original_x;
 
-			// º®¿¡ µµ´ŞÇÒ ¶§±îÁö
+			// ë²½ì— ë„ë‹¬í•  ë•Œê¹Œì§€
 			while (true) {
 				y += dy[dir];
 				x += dx[dir];
 
-				// »ç¹«½ÇÀ» ¹ş¾î³ª°Å³ª º®ÀÌ ÀÖÀ¸¸é Å»Ãâ
+				// ì‚¬ë¬´ì‹¤ì„ ë²—ì–´ë‚˜ê±°ë‚˜ ë²½ì´ ìˆìœ¼ë©´ íƒˆì¶œ
 				if (y < 0 || y >= n || x < 0 || x >= m || map[y][x] == 6) {
 					break;
 				}
-				// °¨½Ã °¡´ÉÇÑ °÷ÀÌ¸é watchedAreaÁõ°¡½ÃÅ°°í Ä­ »óÅÂ¸¦ 7·Î ¹Ù²Ş
+				// ê°ì‹œ ê°€ëŠ¥í•œ ê³³ì´ë©´ watchedAreaì¦ê°€ì‹œí‚¤ê³  ì¹¸ ìƒíƒœë¥¼ 7ë¡œ ë°”ê¿ˆ
 				if (map[y][x] == 0) {
 					watchedArea++;
 					map[y][x] = 7;
 				}
 			}
 
-			// ÇöÀç »ç°¢Áö´ë¿¡¼­ °¨½Ã °¡´ÉÇÑ °÷À» »©°í Å½»ö
+			// í˜„ì¬ ì‚¬ê°ì§€ëŒ€ì—ì„œ ê°ì‹œ ê°€ëŠ¥í•œ ê³³ì„ ë¹¼ê³  íƒìƒ‰
 			simulate(idx + 1, blindSpot - watchedArea);
 
-			// ¸Ê »óÅÂ°¡ ÇÏ³ª¶óµµ ¹Ù²î¾úÀ¸¸é ¸Ê º¹±¸
+			// ë§µ ìƒíƒœê°€ í•˜ë‚˜ë¼ë„ ë°”ë€Œì—ˆìœ¼ë©´ ë§µ ë³µêµ¬
 			if (watchedArea) {
 				memcpy(map, tempMap, sizeof(map));
 			}
 		}
 	}
-	// cctv¹øÈ£°¡ 2¹øÀÌ¸é
+	// cctvë²ˆí˜¸ê°€ 2ë²ˆì´ë©´
 	else if (cctvNo == 2) {
-		// cctv´Â µÎ ¹ø¸¸ µ¹¸®¸é ¸ğµç ¹æÇâ Å½»ö °¡´É
+		// cctvëŠ” ë‘ ë²ˆë§Œ ëŒë¦¬ë©´ ëª¨ë“  ë°©í–¥ íƒìƒ‰ ê°€ëŠ¥
 		for (int dir = 0; dir < 2; dir++) {
 			int watchedArea = 0;
 
-			// coveredDirÀº ÇÑ ¹ø¿¡ Ä¿¹ö °¡´ÉÇÑ ¹æÇâ
-			// ÇÑ ¹ø¿¡ µÎ ¹æÇâÀ» Ä¿¹ö °¡´ÉÇÏ¹Ç·Î count°¡ 2°¡ µÇ±â Àü±îÁö Å½»ö
-			// ÇÑ ¹ø¿¡ ¹İ´ë ¹æÇâ±îÁö Å½»ö °¡´ÉÇÏ¹Ç·Î (coveredDir + 2) % 4
+			// coveredDirì€ í•œ ë²ˆì— ì»¤ë²„ ê°€ëŠ¥í•œ ë°©í–¥
+			// í•œ ë²ˆì— ë‘ ë°©í–¥ì„ ì»¤ë²„ ê°€ëŠ¥í•˜ë¯€ë¡œ countê°€ 2ê°€ ë˜ê¸° ì „ê¹Œì§€ íƒìƒ‰
+			// í•œ ë²ˆì— ë°˜ëŒ€ ë°©í–¥ê¹Œì§€ íƒìƒ‰ ê°€ëŠ¥í•˜ë¯€ë¡œ (coveredDir + 2) % 4
 			for (int coveredDir = dir, count = 0; count < 2; count++, coveredDir = (coveredDir + 2) % 4) {
 				y = original_y;
 				x = original_x;
@@ -117,14 +117,14 @@ void simulate(int idx, int blindSpot) {
 
 		}
 	}
-	// cctv°¡ 3¹øÀÌ¸é
+	// cctvê°€ 3ë²ˆì´ë©´
 	else if (cctvNo == 3) {
-		// ³× ¹ø µ¹¸± ¶§ ¸ğµÎ ´Ù¸¥ Áö¿ªÀ» Å½»öÇÏ°Ô µÊ
+		// ë„¤ ë²ˆ ëŒë¦´ ë•Œ ëª¨ë‘ ë‹¤ë¥¸ ì§€ì—­ì„ íƒìƒ‰í•˜ê²Œ ë¨
 		for (int dir = 0; dir < 4; dir++) {
 			int watchedArea = 0;
 
-			// 90µµ ¹æÇâÀ¸·Î µÎ ¹æÇâ Ä¿¹ö °¡´ÉÇÏ¹Ç·Î
-			// count < 2±îÁöÀÌ°í, coveredDirÀº (coveredDir + 1) % 4
+			// 90ë„ ë°©í–¥ìœ¼ë¡œ ë‘ ë°©í–¥ ì»¤ë²„ ê°€ëŠ¥í•˜ë¯€ë¡œ
+			// count < 2ê¹Œì§€ì´ê³ , coveredDirì€ (coveredDir + 1) % 4
 			for (int coveredDir = dir, count = 0; count < 2; count++, coveredDir = (coveredDir + 1) % 4) {
 				y = original_y;
 				x = original_x;
@@ -149,13 +149,13 @@ void simulate(int idx, int blindSpot) {
 			}
 		}
 	}
-	// cctvNo°¡ 4¹øÀÌ¸é
+	// cctvNoê°€ 4ë²ˆì´ë©´
 	else if (cctvNo == 4) {
-		// ³× ¹ø µ¹¸± ¶§¸¶´Ù ´Ù¸¥ Áö¿ªÀ» Å½»ö
+		// ë„¤ ë²ˆ ëŒë¦´ ë•Œë§ˆë‹¤ ë‹¤ë¥¸ ì§€ì—­ì„ íƒìƒ‰
 		for (int dir = 0; dir < 4; dir++) {
 			int watchedArea = 0;
-			// ÇÑ ¹ø¿¡ ¼¼ ¹æÇâÀ» Å½»ö °¡´ÉÇÏ´Ù.
-			// count < 3±îÁöÀÌ°í, coveredDir = (coveredDir + 1) % 4
+			// í•œ ë²ˆì— ì„¸ ë°©í–¥ì„ íƒìƒ‰ ê°€ëŠ¥í•˜ë‹¤.
+			// count < 3ê¹Œì§€ì´ê³ , coveredDir = (coveredDir + 1) % 4
 			for (int coveredDir = dir, count = 0; count < 3; count++, coveredDir = (coveredDir + 1) % 4) {
 				y = original_y;
 				x = original_x;
@@ -180,10 +180,10 @@ void simulate(int idx, int blindSpot) {
 			}
 		}
 	}
-	// cctv¹øÈ£°¡ 5¹ø
+	// cctvë²ˆí˜¸ê°€ 5ë²ˆ
 	else {
 		int watchedArea = 0;
-		// ÇÑ ¹ø¿¡ ¸ğµç ¹æÇâ Å½»ö °¡´É
+		// í•œ ë²ˆì— ëª¨ë“  ë°©í–¥ íƒìƒ‰ ê°€ëŠ¥
 		for (int coveredDir = 0; coveredDir < 4; coveredDir++) {
 			y = original_y;
 			x = original_x;
@@ -216,21 +216,21 @@ int main() {
 
 	cin >> n >> m;
 
-	// spotÀº ¸Ê »óÅÂ¸¦ ¹ŞÀ½
+	// spotì€ ë§µ ìƒíƒœë¥¼ ë°›ìŒ
 	int spot;
-	// blindSpotÀº »ç°¢Áö´ë °³¼ö
+	// blindSpotì€ ì‚¬ê°ì§€ëŒ€ ê°œìˆ˜
 	int blindSpot = 0;
 
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			cin >> spot;
-			// 0ÀÌ¸é »ç°¢Áö´ë
+			// 0ì´ë©´ ì‚¬ê°ì§€ëŒ€
 			if (spot == 0) {
 				blindSpot++;
 			}
-			// 6ÀÌ¸é º®ÀÌ¹Ç·Î ±×³É ³Ñ¾î°¨
+			// 6ì´ë©´ ë²½ì´ë¯€ë¡œ ê·¸ëƒ¥ ë„˜ì–´ê°
 			else if (spot == 6);
-			// 1~5ÀÌ¸é cctvÀÌ¹Ç·Î cctv º¤ÅÍ¿¡ »ğÀÔ
+			// 1~5ì´ë©´ cctvì´ë¯€ë¡œ cctv ë²¡í„°ì— ì‚½ì…
 			else {
 				cctv.push_back({ i, j });
 			}
