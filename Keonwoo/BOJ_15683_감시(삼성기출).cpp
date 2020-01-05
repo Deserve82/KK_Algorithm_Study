@@ -12,7 +12,6 @@ int minBlindSpot = 100;
 
 // map과 tempMap을 사용하여 dfs로부터 리턴될 때 map을 복사
 int map[8][8];
-int tempMap[8][8];
 
 // 방향 배열
 //	 3
@@ -45,16 +44,17 @@ void simulate(int idx, int blindSpot) {
 	// cctv의 종류
 	int cctvNo = map[original_y][original_x];
 
-	/// y, x는 cctv가 감시하는 사무실 인덱스, watchedAread는 한 cctv가 감시하는 칸의 개수
-	int y, x, watchedArea;
-	
+	/// y, x는 cctv가 감시하는 사무실 인덱스
+	int y, x;
+
+	int tempMap[8][8];
 	// dfs로부터 리턴시 맵 복구를 위해 저장.
 	memcpy(tempMap, map, sizeof(map));
 
 	// 1번일 때는 한 방향만 탐색 가능하므로 네 방향 모두 탐색
 	if (cctvNo == 1) {
 		for (int dir = 0; dir < 4; dir++) {
-			watchedArea = 0;
+			int watchedArea = 0;
 			y = original_y;
 			x = original_x;
 
@@ -62,7 +62,7 @@ void simulate(int idx, int blindSpot) {
 			while (true) {
 				y += dy[dir];
 				x += dx[dir];
-				
+
 				// 사무실을 벗어나거나 벽이 있으면 탈출
 				if (y < 0 || y >= n || x < 0 || x >= m || map[y][x] == 6) {
 					break;
@@ -87,7 +87,7 @@ void simulate(int idx, int blindSpot) {
 	else if (cctvNo == 2) {
 		// cctv는 두 번만 돌리면 모든 방향 탐색 가능
 		for (int dir = 0; dir < 2; dir++) {
-			watchedArea = 0;
+			int watchedArea = 0;
 
 			// coveredDir은 한 번에 커버 가능한 방향
 			// 한 번에 두 방향을 커버 가능하므로 count가 2가 되기 전까지 탐색
@@ -109,7 +109,7 @@ void simulate(int idx, int blindSpot) {
 				}
 			}
 
-			simulate(idx + 1,  blindSpot - watchedArea);
+			simulate(idx + 1, blindSpot - watchedArea);
 
 			if (watchedArea) {
 				memcpy(map, tempMap, sizeof(map));
@@ -118,10 +118,10 @@ void simulate(int idx, int blindSpot) {
 		}
 	}
 	// cctv가 3번이면
-	else if(cctvNo == 3) {
+	else if (cctvNo == 3) {
 		// 네 번 돌릴 때 모두 다른 지역을 탐색하게 됨
 		for (int dir = 0; dir < 4; dir++) {
-			watchedArea = 0;
+			int watchedArea = 0;
 
 			// 90도 방향으로 두 방향 커버 가능하므로
 			// count < 2까지이고, coveredDir은 (coveredDir + 1) % 4
@@ -153,7 +153,7 @@ void simulate(int idx, int blindSpot) {
 	else if (cctvNo == 4) {
 		// 네 번 돌릴 때마다 다른 지역을 탐색
 		for (int dir = 0; dir < 4; dir++) {
-			watchedArea = 0;
+			int watchedArea = 0;
 			// 한 번에 세 방향을 탐색 가능하다.
 			// count < 3까지이고, coveredDir = (coveredDir + 1) % 4
 			for (int coveredDir = dir, count = 0; count < 3; count++, coveredDir = (coveredDir + 1) % 4) {
@@ -182,7 +182,7 @@ void simulate(int idx, int blindSpot) {
 	}
 	// cctv번호가 5번
 	else {
-		watchedArea = 0;
+		int watchedArea = 0;
 		// 한 번에 모든 방향 탐색 가능
 		for (int coveredDir = 0; coveredDir < 4; coveredDir++) {
 			y = original_y;
