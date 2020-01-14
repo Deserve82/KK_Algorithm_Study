@@ -16,6 +16,8 @@ for op in range(4):
         else:
             operators.append('/')
 operators_combination = list(permutations(operators))
+operators_combination = list(set(operators_combination))
+
 for operate in operators_combination:
     temp = 0
     for i in range(len(operate)):
