@@ -6,7 +6,7 @@ for _ in range(n):
 max_v = 0
 for i in range(n):
     for j in range(m):
-        if i <= n-2 and j <= m-2:
+        if i < n-1 and j < m-1:
             square = f[i][j] + f[i + 1][j] + f[i][j + 1] + f[i + 1][j + 1]
             if max_v < square:
                 max_v = square
@@ -50,7 +50,7 @@ for i in range(n):
             hook_8 = f[i][j] + f[i+1][j] + f[i+1][j-1] + f[i+1][j-2]
             if max_v < hook_8:
                 max_v = hook_8
-        if i <= n-2 and j+2 < m:
+        if i < n-1 and j < m-2:
             z1 = f[i][j] + f[i][j+1] + f[i+1][j+1] + f[i+1][j+2]
             if max_v < z1:
                 max_v = z1
@@ -62,8 +62,8 @@ for i in range(n):
             z3 = f[i][j] + f[i+1][j] + f[i+1][j-1] + f[i+2][j-1]
             if max_v < z3:
                 max_v = z3
-        if i <= n-2 and 1 < j < m:
-            z4 = f[i][j] + f[i][j-1] + f[i+1][j-1] + f[i+1][j-2]
+        if 0 < i < n and j < m-2:
+            z4 = f[i][j] + f[i][j+1] + f[i-1][j+1] + f[i-1][j+2]
             if max_v < z4:
                 max_v = z4
         if i < n-1 and j < m-2:
@@ -78,7 +78,7 @@ for i in range(n):
             f3 = f[i][j] + f[i][j+1] + f[i][j+2] + f[i-1][j+1]
             if max_v < f3:
                 max_v = f3
-        if 0 < i < n-1 and 0 < j < m-1:
+        if 0 < i < n-1 and j < m-1:
             f4 = f[i][j] + f[i-1][j+1] + f[i][j+1] + f[i+1][j+1]
             if max_v < f4:
                 max_v = f4
