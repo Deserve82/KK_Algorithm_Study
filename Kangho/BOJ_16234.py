@@ -11,7 +11,6 @@ for _ in range(n):
 loop = 0
 count = -1
 while True:
-    sums = 0
     count = 0
     for i in range(n):
         for j in range(n):
@@ -32,6 +31,7 @@ while True:
     for i in range(n):
         for j in range(n):
             if nations[i][j][1]:
+                sums = 0
                 Q = []
                 even_list = []
                 Q.append((i, j))
@@ -52,7 +52,6 @@ while True:
                                 nations[m_i][m_j][1] = False
                                 even_list.append((m_i, m_j))
                 ev = int(sums/group_count)
-
                 while even_list:
                     change_value = even_list.pop()
                     nations[change_value[0]][change_value[1]][0] = ev
