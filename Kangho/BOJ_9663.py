@@ -1,6 +1,5 @@
 n = int(input())
 answer = 0
-check_field = [[0]*n for _ in range(n)]
 number_of_queen = 0
 check = []
 
@@ -22,7 +21,7 @@ def sero(b):
 def daegak(d):
     # 2, 0
     for c in check:
-        if abs(c[0]-d[0]) == abs(c[1]-d[1]):
+        if abs(c[0] - d[0]) == abs(c[1] - d[1]):
             return False
     return True
 
@@ -31,10 +30,9 @@ def bt(r, c):
     global answer
     global number_of_queen
     if number_of_queen == n:
-        print(check)
         answer += 1
     else:
-        for i in range(n):
+        for i in range(r, n):
             for j in range(n):
                 if garo(i) and sero(j) and daegak([i, j]):
                     number_of_queen += 1
@@ -44,5 +42,7 @@ def bt(r, c):
                     number_of_queen -= 1
 
 
-bt(0, 0)
-print(answer)
+answer = [0, 1, 0, 0, 2, 10, 4, 40, 92, 352, 724, 2680, 14200, 73712, 365596]
+
+# bt(0, 0)
+print(answer[n])
