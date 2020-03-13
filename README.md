@@ -2,4 +2,4 @@
 
 study of Seorabol
 
-At least one problem a day
+At least one problem a day!
