@@ -1,61 +1,36 @@
-def solution(s):
-    answer = len(s)
-    for word in range(1, int(len(s)/2)+1):
-        count = 0
-        temp_word = s[word:]
-        temp_pivot = s[0:word]
-        temp_word_count = 1
-        while True:
-            if temp_pivot == temp_word[:word] and word <= len(temp_word):
-                temp_word = temp_word[word:]
-                temp_word_count += 1
-            elif temp_pivot != temp_word[:word] and word <= len(temp_word) or len(temp_word) == 0:
-                if temp_word_count == 1:
-                    count += word
-                    temp_word_count = 0
-                elif temp_word_count < 10:
-                    count += 1
-                    count += word
-                    temp_word_count = 0
-                elif temp_word_count < 100:
-                    count += 2
-                    count += word
-                    temp_word_count = 0
-                elif temp_word_count < 1000:
-                    count += 3
-                    count += word
-                    temp_word_count = 0
-                elif temp_word_count == 1000:
-                    count += 4
-                    count += word
-                    temp_word_count = 0
-                temp_pivot = temp_word[:word]
-                if len(temp_word) == 0:
-                    break
-            elif word > len(temp_word):
-                if temp_word_count == 1:
-                    count += word
-                    temp_word_count = 0
-                elif temp_word_count < 10:
-                    count += 1
-                    count += word
-                    temp_word_count = 0
-                elif temp_word_count < 100:
-                    count += 2
-                    count += word
-                    temp_word_count = 0
-                elif temp_word_count < 1000:
-                    count += 3
-                    count += word
-                    temp_word_count = 0
-                elif temp_word_count == 1000:
-                    count += 4
-                    count += word
-                    temp_word_count = 0
-                count += len(temp_word)
-                break
-        if 0 < count < answer:
-            answer = count
-    return answer
+s = "abcabcabcabcdededededede"
+answer = len(s)
+l = len(s)
+for i in range(1, l):
+    length = len(s)
+    pivot = s[0:i]
+    change_flag = False
+    time_stack = 0
+    for j in range(1, int(length/i)):
+        if pivot == s[j*i:j*i+i]:
+            length -= len(pivot)
+            if not change_flag:
+                length += 1
+                change_flag = True
+            else:
+                time_stack += 1
+        else:
+            pivot = s[j*i:j*i+i]
+            change_flag = False
+            if 9 < time_stack < 100:
+                length += 1
+            if 99 < time_stack < 1000:
+                length += 2
+            if 999 < time_stack < 10000:
+                length += 3
+            time_stack = 1
+    if 9 < time_stack < 100:
+        length += 1
+    if 99 < time_stack < 1000:
+        length += 2
+    if 999 < time_stack < 10000:
+        length += 3
+    if length < answer:
+        answer = length
 
-print(solution("kikikikikmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"))
+print(answer)
