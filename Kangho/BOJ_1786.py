@@ -29,7 +29,7 @@ def kmp(text, fail, pat):
             if j == pat_len - 1:
                 answer_count += 1
                 answer_list.append((i - j) + 1)
-                j -= 1
+                j = fail[j]
             else:
                 j += 1
     return answer_count, answer_list
