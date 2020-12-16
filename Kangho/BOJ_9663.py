@@ -1,48 +1,60 @@
+# 내가 푼 느린 코드
 n = int(input())
-answer = 0
-number_of_queen = 0
-check = []
+row_check = [False] * n
+col_check = [False] * n
+cnt = 0
+daegaks = []
 
 
-def garo(a):
-    for c in check:
-        if c[0] == a:
-            return False
-    return True
+def check_daegak(i, j):
+    for d in daegaks:
+        if abs(d[0] - i) == abs(d[1] - j):
+            return True
+    return False
 
 
-def sero(b):
-    for c in check:
-        if c[1] == b:
-            return False
-    return True
-
-
-def daegak(d):
-    # 2, 0
-    for c in check:
-        if abs(c[0] - d[0]) == abs(c[1] - d[1]):
-            return False
-    return True
-
-
-def bt(r, c):
-    global answer
-    global number_of_queen
-    if number_of_queen == n:
-        answer += 1
+def queen(qn, r):
+    global n, cnt
+    if qn == n:
+        cnt += 1
+        return
     else:
         for i in range(r, n):
             for j in range(n):
-                if garo(i) and sero(j) and daegak([i, j]):
-                    number_of_queen += 1
-                    check.append([i, j])
-                    bt(i, j)
-                    check.pop()
-                    number_of_queen -= 1
+                if not row_check[i] and not col_check[j]:
+                    on_daegak = check_daegak(i, j)
+                    if not on_daegak:
+                        row_check[i], col_check[j] = True, True
+                        daegaks.append((i, j))
+                        queen(qn + 1, i)
+                        daegaks.pop()
+                        row_check[i], col_check[j] = False, False
 
 
-answer = [0, 1, 0, 0, 2, 10, 4, 40, 92, 352, 724, 2680, 14200, 73712, 365596]
+queen(0, 0)
+print(cnt)
 
-# bt(0, 0)
-print(answer[n])
+
+# 최적화를 적용한 코드
+n = int(input())
+row_check = [False] * n
+left = [False] * (2*n-1)
+right = [False] * (2*n-1)
+cnt = 0
+
+
+def queen(qn):
+    global n, cnt
+    if qn == n:
+        cnt += 1
+        return
+    else:
+        for j in range(n):
+            if not row_check[j] and not left[j + qn] and not right[n-1 + qn - j]:
+                row_check[j] = left[j + qn] = right[n-1 + qn - j] = True
+                queen(qn + 1)
+                row_check[j] = left[j + qn] = right[n-1 + qn - j] = False
+
+
+queen(0)
+print(cnt)
