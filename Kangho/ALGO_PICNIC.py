@@ -56,4 +56,36 @@ for _ in range(n):
     make_couple(0)
     print(cnt)
     cnt = 0
+    
+# 종만북 풀이 - 내 원래 풀이보다 3배 빠름
+def make_couple():
+    global nof
 
+    first_free = -1
+    for i in range(nof):
+        if not checker[i]:
+            first_free = i
+            break
+    if first_free == -1:
+        return 1
+    
+    ret = 0
+    for j in range(first_free+1, nof):
+        if not checker[j] and couples[first_free][j]:
+            checker[j] = checker[first_free] = True
+            ret += make_couple()
+            checker[j] = checker[first_free] = False
+    return ret
+
+
+n = int(input())
+for _ in range(n):
+    nof, cc = map(int, input().split())
+    couples = [[False] * nof for _ in range(nof)]
+    checker = [False]*nof
+    cl = list(map(int, input().split()))
+    for _ in range(cc):
+        a, b = cl.pop(), cl.pop()
+        couples[a][b] = True
+        couples[b][a] = True
+    print(make_couple())
