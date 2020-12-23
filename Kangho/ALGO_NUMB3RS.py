@@ -1,5 +1,5 @@
 import sys
-
+# 시간 초과 해결 하기 힘듬...ㅠ
 
 def catch_me_if_you_can(loc, day):
     if day == days:
