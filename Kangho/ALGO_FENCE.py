@@ -24,3 +24,26 @@ for _ in range(int(input())):
     n = int(input())
     sticks = list(map(int, input().split()))
     print(dq(0, n-1))
+
+    
+# swiping algorithm을 사용한 방법 시간 복잡도는 O(n)
+def solve_stack():
+    remaining = []
+    h.append(0)
+    ret = 0
+    for i in range(len(h)):
+        while remaining and h[remaining[-1]] >= h[i]:
+            j = remaining.pop()
+            if not remaining:
+                width = i
+            else:
+                width = (i - remaining[-1] - 1)
+            ret = max(ret, h[j] * width)
+        remaining.append(i)
+    return ret
+
+
+for _ in range(int(input())):
+    n = int(input())
+    h = list(map(int, input().split()))
+    print(solve_stack())
