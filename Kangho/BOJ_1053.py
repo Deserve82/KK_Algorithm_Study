@@ -9,9 +9,6 @@ def swap_char(a, b, st):
 
 
 def factory(start_idx, end_idx, string):
-    if start_idx >= end_idx:
-        return 0
-
     if cache[start_idx][end_idx] != -1:
         return cache[start_idx][end_idx]
 
