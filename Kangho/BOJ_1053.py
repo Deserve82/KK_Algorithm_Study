@@ -40,3 +40,13 @@ for com in change_two:
     s = swap_char(com[0], com[1], S)
     answer = min(answer, factory(0, s_len-1, s) + 1)
 print(answer)
+
+
+# 전에 오답처리 되었던 점화식, 당연히 first가 고정되어있기 떄문에 오답이 나오겠다는 생각이 들었다. - dp를 위한 맞춤 풀이 
+#     ret = min(
+#         ret,
+#         factory(start_idx, end_idx, string[:end_idx] + string[start_idx] + string[end_idx + 1:]) + 1,
+#         factory(start_idx, end_idx + 1, string[:end_idx+1] + string[start_idx] + string[end_idx+1:]) + 1,
+#         factory(start_idx, end_idx - 1, string[:end_idx] + string[end_idx+1:]) + 1,
+#     )
+
