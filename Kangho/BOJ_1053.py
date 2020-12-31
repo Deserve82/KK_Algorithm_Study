@@ -15,10 +15,17 @@ def factory(start_idx, end_idx, string):
     if cache[start_idx][end_idx] != -1:
         return cache[start_idx][end_idx]
 
-    ret = 1000000000
-    if string[start_idx] == string[end_idx]:
-        ret = min(ret, factory(start_idx+1, end_idx-1, string))
+    while start_idx < end_idx:
+        if string[start_idx] == string[end_idx]:
+            start_idx += 1
+            end_idx -= 1
+        else:
+            break
 
+    if start_idx >= end_idx:
+        return 0
+
+    ret = 1000000000
     ret = min(
         ret,
         factory(start_idx + 1, end_idx, string) + 1,
