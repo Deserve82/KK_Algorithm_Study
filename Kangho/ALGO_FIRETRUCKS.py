@@ -10,23 +10,24 @@ for _ in range(int(input())):
         s, e, w = map(int, sys.stdin.readline().split())
         board[s].append((w, e))
         board[e].append((w, s))
-
     fire_spots = list(map(int, sys.stdin.readline().split()))
     fire_stations = list(map(int, sys.stdin.readline().split()))
-
     for fire_station in fire_stations:
-        check = [False] * (G + 1)
-        pq = []
-        answers[fire_station] = 0
-        hq.heappush(pq, (0, fire_station))
-        while pq:
-            here_weight,  here = hq.heappop(pq)
-            for next_weight, next_node in board[here]:
-                cost = here_weight + next_weight
-                if cost < answers[next_node] and not check[next_node]:
-                    answers[next_node] = cost
-                    hq.heappush(pq, (cost, next_node))
-            check[here] = True
+        board[0].append((0, fire_station))
+        board[fire_station].append((0, 0))
+
+    check = [False] * (G + 1)
+    pq = []
+    answers[0] = 0
+    hq.heappush(pq, (0, 0))
+    while pq:
+        here_weight,  here = hq.heappop(pq)
+        for next_weight, next_node in board[here]:
+            cost = here_weight + next_weight
+            if cost < answers[next_node] and not check[next_node]:
+                answers[next_node] = cost
+                hq.heappush(pq, (cost, next_node))
+        check[here] = True
 
     cs = 0
     for fire_spot in fire_spots:
