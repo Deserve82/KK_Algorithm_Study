@@ -1,21 +1,25 @@
 import sys
-
-count = 0
-def is_palindrom(s, e):
-    while s < e:
-        if numbers[s] != numbers[e]:
-            return False
-        s += 1
-        e -= 1
-    return True
+sys.setrecursionlimit(100000)
 
 
-n = int(sys.stdin.readline())
-numbers = list(map(int, sys.stdin.readline().split()))
-m = int(sys.stdin.readline())
-for _ in range(m):
-    start, end = map(int, sys.stdin.readline().split())
-    if is_palindrom(start-1, end-1):
-        print(1)
+def is_palindrome(start, end):
+    if start >= end:
+        return 1
+
+    if cache[start][end] != -1:
+        return cache[start][end]
+
+    if numbers[start] == numbers[end]:
+        cache[start][end] = is_palindrome(start+1, end-1)
     else:
-        print(0)
+        cache[start][end] = 0
+    return cache[start][end]
+
+
+N = int(sys.stdin.readline())
+numbers = list(map(int, sys.stdin.readline().split()))
+M = int(sys.stdin.readline())
+cache = [[-1]*N for _ in range(N)]
+for _ in range(M):
+    a, b = map(int, sys.stdin.readline().split())
+    print(is_palindrome(a-1, b-1))
