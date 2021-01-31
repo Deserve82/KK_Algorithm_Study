@@ -1,67 +1,50 @@
-import sys
+def dynamic(sem, taken):
+    if bin(taken).count("1") >= K:
+        return 0
+    if sem == M:
+        return float('inf')
 
-INF = float('inf')
+    if cache[sem][taken] is not None:
+        return cache[sem][taken]
 
+    can_take = semesters[sem] & ~taken
+    for i in range(N):
+        if (can_take & (1 << i)) and (pre_require[i] & taken) != pre_require[i]:
+            can_take &= ~(1 << i)
 
-def min_semestered_required(K, L, prerequisites, opened_lectures):
-    N, S = len(prerequisites), len(opened_lectures)
-    cache = [[None] * (1 << N) for _ in range(S)]
+    ret = float('inf')
+    take = can_take + 1
+    while take:
+        take = (take - 1) & can_take
+        if bin(take).count("1") <= L:
+            ret = min(ret, dynamic(sem + 1, taken | take) + 1)
 
-    def graduate(semester, taken):
-        if bin(taken).count("1") >= K:
-            return 0
-        elif semester == S:
-            return INF
-
-        if cache[semester][taken] is not None:
-            return cache[semester][taken]
-
-        ret = INF
-        # 아번 학기 중에 이미 들었던 것을 제외한 목록
-        can_take = opened_lectures[semester] & ~taken
-
-        # 선수과목 안들은 것들을 빼준다
-        for i in range(N):
-            if (can_take & (1 << i)) and (taken & prerequisites[i]) != prerequisites[i]:
-                can_take &= ~(1 << i)
-
-        # 집합의 모든 부분집합 순회
-        take = can_take + 1
-
-        while take:
-            take = (take - 1) & can_take
-            if bin(take).count("1") <= L:
-                ret = min(ret, graduate(semester + 1, taken | take) + 1)
-
-        # 아무것도 안 들을 경우
-        ret = min(ret, graduate(semester + 1, taken))
-        cache[semester][taken] = ret
-        return ret
-
-    aa = graduate(0, 0)
-    return aa if aa != INF else "IMPOSSIBLE"
+    ret = min(ret, dynamic(sem+1, taken))
+    cache[sem][taken] = ret
+    return ret
 
 
-ans = []
-for _ in range(int(sys.stdin.readline())):
-    N, K, S, L = map(int, sys.stdin.readline().split())
-    prerequisites = []
-    opened_lectures = []
-
+for _ in range(int(input())):
+    N, K, M, L = map(int, input().split())
+    pre_require = []
+    semesters = []
     for _ in range(N):
-        pre_class = list(map(int, sys.stdin.readline().split()))
-        pres_bit = 0
-        for p in pre_class[1:]:
-            pres_bit |= (1 << p)
-        prerequisites.append(pres_bit)
+        requires = list(map(int, input().split()))
+        cla = 0
+        for r in requires[1:]:
+            cla |= (1 << r)
+        pre_require.append(cla)
 
-    for _ in range(S):
-        lectures = list(map(int, sys.stdin.readline().split()))
-        check_sem = 0
-        for s in lectures[1:]:
-            check_sem |= (1 << s)
-        opened_lectures.append(check_sem)
+    for _ in range(M):
+        semester = list(map(int, input().split()))
+        w = 0
+        for s in semester[1:]:
+            w |= (1 << s)
+        semesters.append(w)
 
-    ans.append(min_semestered_required(K, L, prerequisites, opened_lectures))
-for ret in ans:
-    print(ret)
+    cache = [[None] * (1 << N) for _ in range(M)]
+    ans = dynamic(0, 0)
+    if ans == float('inf'):
+        print("IMPOSSIBLE")
+    else:
+        print(ans)
