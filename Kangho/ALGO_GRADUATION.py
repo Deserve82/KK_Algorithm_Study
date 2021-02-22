@@ -1,50 +1,46 @@
-def dynamic(sem, taken):
-    if bin(taken).count("1") >= K:
+import sys
+input = sys.stdin.readline
+
+
+def dp(sem, studied):
+    if bin(studied).count("1") >= K and sem <= M:
         return 0
-    if sem == M:
-        return float('inf')
+    elif sem >= M:
+        return 9999
 
-    if cache[sem][taken] is not None:
-        return cache[sem][taken]
+    if cache[sem][studied] != -1:
+        return cache[sem][studied]
+    ret = 9999
+    can_take = 0
+    classes = semesters[sem]
+    for c in classes:
+        if studied & (1 << c) == 0 and pre_require[c] & studied == pre_require[c]:
+            can_take |= (1 << c)
 
-    can_take = semesters[sem] & ~taken
-    for i in range(N):
-        if (can_take & (1 << i)) and (pre_require[i] & taken) != pre_require[i]:
-            can_take &= ~(1 << i)
+    subset = can_take + 1
+    while subset:
+        subset = (subset-1) & can_take
+        if bin(subset).count("1") <= L:
+            ret = min(ret, dp(sem+1, studied | subset) + 1)
 
-    ret = float('inf')
-    take = can_take + 1
-    while take:
-        take = (take - 1) & can_take
-        if bin(take).count("1") <= L:
-            ret = min(ret, dynamic(sem + 1, taken | take) + 1)
-
-    ret = min(ret, dynamic(sem+1, taken))
-    cache[sem][taken] = ret
+    ret = min(ret, dp(sem+1, studied))
+    cache[sem][studied] = ret
     return ret
 
 
 for _ in range(int(input())):
     N, K, M, L = map(int, input().split())
-    pre_require = []
+    pre_require = [0] * N
+    for i in range(N):
+        pre = list(map(int, input().split()))
+        for num in pre[1:]:
+            pre_require[i] |= (1 << num)
     semesters = []
-    for _ in range(N):
-        requires = list(map(int, input().split()))
-        cla = 0
-        for r in requires[1:]:
-            cla |= (1 << r)
-        pre_require.append(cla)
-
     for _ in range(M):
-        semester = list(map(int, input().split()))
-        w = 0
-        for s in semester[1:]:
-            w |= (1 << s)
-        semesters.append(w)
-
-    cache = [[None] * (1 << N) for _ in range(M)]
-    ans = dynamic(0, 0)
-    if ans == float('inf'):
+        semesters.append(list(map(int, input().split()))[1:])
+    cache = [[-1] * (1 << N) for _ in range(M+1)]
+    answer = dp(0, 0)
+    if answer == 9999:
         print("IMPOSSIBLE")
     else:
-        print(ans)
+        print(answer)
