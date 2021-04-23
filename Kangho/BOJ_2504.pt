@@ -1,0 +1,58 @@
+string = list(input())
+answer = 0
+stack = []
+for char in string:
+    if char == '(' or char == '[':
+        stack.append(char)
+    elif char == ')' or char == ']':
+        num = 0
+        if not stack:
+            print(0)
+            exit(0)
+        if stack and (stack[-1] == '(' or stack[-1] == '['):
+            check = stack.pop()
+            if char == ')':
+                if check != '(':
+                    print(0)
+                    exit(0)
+                if stack and stack[-1] != '(' and stack[-1] != '[':
+                    stack[-1] += 2
+                else:
+                    stack.append(2)
+            elif char == ']':
+                if check != '[':
+                    print(0)
+                    exit(0)
+                if stack and stack[-1] != '(' and stack[-1] != '[':
+                    stack[-1] += 3
+                else:
+                    stack.append(3)
+        else:
+            num = stack.pop()
+            if not stack:
+                print(0)
+                exit(0)
+            check = stack.pop()
+            if char == ')':
+                if check != '(':
+                    print(0)
+                    exit(0)
+                if stack and stack[-1] != '(' and stack[-1] != '[':
+                    stack[-1] += num*2
+                else:
+                    stack.append(num*2)
+            else:
+                if check != '[':
+                    print(0)
+                    exit(0)
+                if stack and stack[-1] != '(' and stack[-1] != '[':
+                    stack[-1] += num * 3
+                else:
+                    stack.append(num*3)
+    else:
+        print(0)
+        exit(0)
+if len(stack)>1:
+    print(0)
+else:
+    print(stack[0])
