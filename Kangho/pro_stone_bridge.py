@@ -1,25 +1,20 @@
-def solution(distance, rocks, n):
-    answer = 0
-    left, right = 0, distance + 1
-    rocks.sort()
-    rocks.append(distance)
-    while left <= right:
+def solution(stones, k):
+    left, right = 0, max(stones) * 2
+    while left < right:
         mid = (left + right) // 2
-        curr = 0
-        mid_dis = float('inf')
         cnt = 0
-
-        for rock in rocks:
-            diff = rock - curr
-            if diff < mid:
+        mv = 0
+        for stone in stones:
+            if stone - mid <= 0:
                 cnt += 1
             else:
-                curr = rock
-                mid_dis = min(mid_dis, diff)
+                mv = max(mv, cnt)
+                cnt = 0
+        mv = max(mv, cnt)
 
-        if cnt > n:
-            right = mid - 1
+        if mv >= k:
+            right = mid
         else:
-            answer = mid_dis
             left = mid + 1
+    answer = right
     return answer
