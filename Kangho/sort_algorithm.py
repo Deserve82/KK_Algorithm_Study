@@ -134,9 +134,5 @@ class TestSortingAlgorithm(unittest.TestCase):
     def test_quick_sort(self):
         self.assertEqual(quick_sort(self.arr1), self.arr2)
         
-    def test_quick_sort(self):
-        self.assertEqual(quick_sort_without_cache(self.arr1), self.arr2)
-
-
 if __name__ == '__main__':
     unittest.main()
